@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.get("/api/notes", (req, res) => {
-  fs.readFile("db.json", "utf8", (err, data) => {
+  fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) throw err;
     const notes = JSON.parse(data);
     res.json(notes);
@@ -19,13 +19,13 @@ app.get("/api/notes", (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
-  fs.readFile("db.json", "utf8", (err, data) => {
+  fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) throw err;
     const notes = JSON.parse(data);
     const newNote = req.body;
     newNote.id = uuid.v4();
     notes.push(newNote);
-    fs.writeFile("db.json", JSON.stringify(notes), (err) => {
+    fs.writeFile("./db/db.json", JSON.stringify(notes), (err) => {
       if (err) throw err;
       res.json(newNote);
     });
@@ -33,11 +33,11 @@ app.post("/api/notes", (req, res) => {
 });
 
 app.delete("/api/notes/:id", (req, res) => {
-  fs.readFile("db.json", "utf8", (err, data) => {
+  fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) throw err;
     const notes = JSON.parse(data);
     const updatedNotes = notes.filter((note) => note.id !== req.params.id);
-    fs.writeFile("db.json", JSON.stringify(updatedNotes), (err) => {
+    fs.writeFile("./db/db.json", JSON.stringify(updatedNotes), (err) => {
       if (err) throw err;
       res.json({ msg: "Note deleted" });
     });
